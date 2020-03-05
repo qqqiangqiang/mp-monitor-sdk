@@ -1,0 +1,13 @@
+.DS_Store
+node_modules
+TODOs.md
+selenium-debug.log
+dist/
+explorations
+yarn-error.log
+.idea
+.vscode/settings.json
+.env
+selenium-server.log
+local.log
+browserstack.err

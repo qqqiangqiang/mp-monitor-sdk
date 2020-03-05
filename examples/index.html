@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="/mp-monitor-sdk.js"></script>
+  <script>
+    new Mpperformance({
+      domain: 'http://localhost:7001/api/report',
+      appId: 1244133843
+    });
+  </script>
+  <link href="/test.css" rel="stylesheet" type="text/css" />
+  <!-- 资源加载错误test -->
+  <link href="/test/gggg.css" rel="stylesheet" type="text/css" />
+  <!---->
+</head>
+
+<body>
+  <div>tetststetest</div>
+  <!-- 资源加载错误test -->
+  <img src="/test/gggg.img" />
+  <script type="text/javascript" src="/test/gggg.js"></script>
+  <!---->
+  <!-- js执行错误test -->
+  <script type="text/javascript">
+    function a() {
+      b();
+    }
+    function b() {
+      c();
+    }
+    function c() {
+      console.log('ssssssssssss', this.name.age.gege);
+    }
+    a()
+  </script>
+  <script type="text/javascript">
+    // 当Promise 被 reject 且没有 reject 处理器的时候，会触发 unhandledrejection 事件；
+    var test = new Promise((resolve, reject) => {
+      reject({
+        message: 'not found!'
+      });
+    });
+    // console.error 报错
+    console.error('not found!!!!');
+  </script>
+  <!---->
+</body>
+
+</html>
