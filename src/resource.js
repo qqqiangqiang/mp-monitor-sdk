@@ -15,7 +15,6 @@ function resolveEntries(entries) {
  * @param {object} entry 
  */
 function resolvePerformanceTiming(entry): typesResourceInfo {
-  console.log('>>>>>>>>>>>ggggg', entry);
   let o = {
     initiatorType: entry.initiatorType,
     name: entry.name,

@@ -8,6 +8,41 @@ function filterTime(a, b) {
   return (a > 0 && b > 0 && (a - b) >= 0) ? (a - b) : undefined;
 }
 /**
+ * 格式化error对象，主要从error对象中解析行号、列号等关键信息
+ * @param {Object} errObj Error实例对象
+ */
+function formatError(errObj) {
+  let col = errObj.column || errObj.columnNumber; // Safari Firefox
+  let row = errObj.line || errObj.lineNumber; // Safari Firefox
+  let message = errObj.message;
+  let name = errObj.name;
+  let stackCol = '';
+  let stackRow = '';
+  let resourceUrl = '';
+
+  let { stack } = errObj;
+  if (stack) {
+    let matchUrl = stack.match(/https?:\/\/[^\n]+/);
+    let urlFirstStack = matchUrl ? matchUrl[0] : '';
+    let regUrlCheck = /https?:\/\/(\S)*\.js/;
+
+    if (regUrlCheck.test(urlFirstStack)) {
+      resourceUrl = urlFirstStack.match(regUrlCheck)[0];
+    }
+
+    let posStack = urlFirstStack.match(/:(\d+):(\d+)/);
+    if (posStack && posStack.length >= 3) {
+      [, stackCol, stackRow] = posStack;
+    }
+  }
+  return {
+    content: stack,
+    col: Number(col || stackCol),
+    row: Number(row || stackRow),
+    message, name, resourceUrl
+  };
+}
+/**
  * 兼容事件监听器 
  * @param {string} name 
  * @param {function} callback 
@@ -61,6 +96,7 @@ function genId(length) {
 
 module.exports = {
   filterTime,
+  formatError,
   addEventListener,
   loadReady,
   genId,

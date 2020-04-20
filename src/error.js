@@ -1,5 +1,5 @@
 /* @flow */
-import { addEventListener } from './utils';
+import { addEventListener, formatError } from './utils';
 
 /**
  * 生成runtime错误日志
@@ -17,12 +17,13 @@ function formatRuntimeJsError(allMsg): typesErrorInfo {
   ] = allMsg;
   return {
     t: new Date().getTime(),
-    n: 'js',
+    n: 'onError',
     msg: errObj && errObj.stack ? errObj.stack.toString() : message,
     data: {
-      sourceUrl: source,
-      col: colno || (window.event && window.event.errorCharacter) || 0,
-      line: lineno,
+      message,
+      source,
+      lineno,
+      colno: colno || (window.event && window.event.errorCharacter) || 0,
       stack: errObj.stack
     }
   }
@@ -35,8 +36,8 @@ function formatRuntimeJsError(allMsg): typesErrorInfo {
  */
 function formatResourceError(e): typesErrorInfo {
   return {
-    n: 'resource',
     t: new Date().getTime(),
+    n: 'resourceError',
     msg: e.target.localName + ' is load error',
     data: {
       target: e.target.localName,
@@ -54,8 +55,8 @@ function formatResourceError(e): typesErrorInfo {
 function formatNoRejectHandlerError(e): typesErrorInfo {
   const message = e && e.reason;
   return {
-    n: 'promise',
     t: new Date().getTime(),
+    n: 'promiseError',
     msg: message,
     data: e
   }
@@ -67,9 +68,9 @@ function formatNoRejectHandlerError(e): typesErrorInfo {
  */
 function formatConsoleError(info): typesErrorInfo {
   return {
-    n: 'consoleError',
     t: new Date().getTime(),
-    msg: info
+    n: 'consoleError',
+    data: info instanceof Error ? formatError(info) : info
   }
 }
 
@@ -78,13 +79,7 @@ export default {
     // js
     window.onerror = (function (origin) {
       return (...args) => {
-        const [
-          message, // 错误信息（字符串）。可用于HTML onerror=""处理程序中的event
-          source, // 发生错误的脚本URL（字符串
-          lineno, // 发生错误的行号（数字）
-          colno, // 发生错误的列号（数字）
-          errObj // Error对象（对象）
-        ] = args;
+        console.log('>>>>>>>>>>>>>>>>>>>>', args);
         const errorInfo: typesErrorInfo = formatRuntimeJsError(args);
         cb && cb(errorInfo)
         origin && origin.apply(window, args);
