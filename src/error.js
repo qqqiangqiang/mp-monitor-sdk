@@ -1,6 +1,5 @@
 /* @flow */
 import { addEventListener, formatError } from './utils';
-
 /**
  * 生成runtime错误日志
  * 
@@ -18,7 +17,7 @@ function formatRuntimeJsError(allMsg): typesErrorInfo {
   return {
     t: new Date().getTime(),
     n: 'onError',
-    msg: errObj && errObj.stack ? errObj.stack.toString() : message,
+    msg: message,
     data: {
       message,
       source,
@@ -67,10 +66,12 @@ function formatNoRejectHandlerError(e): typesErrorInfo {
  * @param {string|object} info 错误信息
  */
 function formatConsoleError(info): typesErrorInfo {
+  const errorInfo = info instanceof Error ? formatError(info) : info;
   return {
     t: new Date().getTime(),
     n: 'consoleError',
-    data: info instanceof Error ? formatError(info) : info
+    msg: errorInfo.message || errorInfo,
+    data: errorInfo
   }
 }
 
@@ -79,7 +80,6 @@ export default {
     // js
     window.onerror = (function (origin) {
       return (...args) => {
-        console.log('>>>>>>>>>>>>>>>>>>>>', args);
         const errorInfo: typesErrorInfo = formatRuntimeJsError(args);
         cb && cb(errorInfo)
         origin && origin.apply(window, args);

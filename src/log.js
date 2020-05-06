@@ -27,7 +27,7 @@ class Log {
     const uvId = this.genUvId();
 
     this.baseLog = {
-      type,
+      type, // 1pref和resource上报 2错误上报 3行为上报
       appId,
       addData,
       uvId,
@@ -48,6 +48,8 @@ class Log {
       headers: { 'Content-Type': 'application/json' },
       type: 'report-data',
       body: JSON.stringify(log)
+    }).catch(err => {
+      console.warn(err);
     })
   }
   genUser(): string | number {

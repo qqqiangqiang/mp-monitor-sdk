@@ -66,6 +66,15 @@ declare type typesPerfData = {
   ttfb: string | number;  // 首字节时间
 }
 
+declare type behaviorData = {
+  behaviorType: string,
+  xpath: string,
+  tagName: string; // dom tagName
+  className: string; // dom className
+  innerHtml: string; // dom innerHtml
+  innerText: string; // dom innerText
+}
+
 declare type typesLogOptions = {
   appId: string | number;
   domain: string;

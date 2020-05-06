@@ -13,18 +13,23 @@
       appId: 1244133843
     });
   </script>
-  <link href="/test.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="/test.css" rel="stylesheet" type="text/css" /> -->
   <!-- 资源加载错误test -->
-  <link href="/test/gggg.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="/test/gggg.css" rel="stylesheet" type="text/css" /> -->
   <!---->
 </head>
 
 <body>
-  <div>tetststetest</div>
+  <div>
+    tetststetest
+    <button class="click2">点击行为2</button>
+  </div>
   <!-- 资源加载错误test -->
-  <img src="/test/gggg.img" />
-  <script type="text/javascript" src="/test/gggg.js"></script>
+  <!-- <img src="/test/gggg.img" /> -->
+  <!-- <script type="text/javascript" src="/test/gggg.js"></script> -->
   <!---->
+  <!-- 用户行为 -->
+  <button class="click">点击行为</button>
   <!-- js执行错误test -->
   <script type="text/javascript">
     function a() {
@@ -40,11 +45,11 @@
   </script>
   <script type="text/javascript">
     // 当Promise 被 reject 且没有 reject 处理器的时候，会触发 unhandledrejection 事件；
-    var test = new Promise((resolve, reject) => {
-      reject({
-        message: 'not found!'
-      });
-    });
+    // var test = new Promise((resolve, reject) => {
+    //   reject({
+    //     message: 'not found!'
+    //   });
+    // });
     try {
       console.log(fffffffffff)
     } catch (e) {

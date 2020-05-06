@@ -12,34 +12,37 @@ function filterTime(a, b) {
  * @param {Object} errObj Error实例对象
  */
 function formatError(errObj) {
-  let col = errObj.column || errObj.columnNumber; // Safari Firefox
-  let row = errObj.line || errObj.lineNumber; // Safari Firefox
+  let line = errObj.line || errObj.lineNumber; // Safari Firefox
+  let column = errObj.column || errObj.columnNumber; // Safari Firefox
   let message = errObj.message;
   let name = errObj.name;
-  let stackCol = '';
-  let stackRow = '';
+  let stackLine = '';
+  let stackColumn = '';
   let resourceUrl = '';
 
   let { stack } = errObj;
   if (stack) {
     let matchUrl = stack.match(/https?:\/\/[^\n]+/);
     let urlFirstStack = matchUrl ? matchUrl[0] : '';
-    let regUrlCheck = /https?:\/\/(\S)*\.js/;
+    let regUrlCheck = /(https?:\/\/(\S)*(\.js)?)\/:\d+:\d+/;
 
     if (regUrlCheck.test(urlFirstStack)) {
-      resourceUrl = urlFirstStack.match(regUrlCheck)[0];
+      resourceUrl = urlFirstStack.match(regUrlCheck)[1];
     }
 
     let posStack = urlFirstStack.match(/:(\d+):(\d+)/);
     if (posStack && posStack.length >= 3) {
-      [, stackCol, stackRow] = posStack;
+      [, stackLine, stackColumn] = posStack;
     }
   }
   return {
-    content: stack,
-    col: Number(col || stackCol),
-    row: Number(row || stackRow),
-    message, name, resourceUrl
+    name,
+    message,
+    stack,
+    source: resourceUrl,
+    lineno: Number(line || stackLine),
+    colno: Number(column || stackColumn),
+    stack: errObj.stack
   };
 }
 /**
@@ -96,9 +99,9 @@ function genId(length) {
 
 module.exports = {
   filterTime,
-  formatError,
   addEventListener,
   loadReady,
   genId,
-  onload
+  onload,
+  formatError
 }

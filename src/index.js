@@ -3,6 +3,7 @@ import Log from './log'
 import perf from './perf'
 import error from './error';
 import resource from './resource';
+import behavior from './behavior';
 
 export default class Mpperformance {
   options: Object
@@ -17,13 +18,15 @@ export default class Mpperformance {
       addData = {},
       errorEnable = true,
       resourceEnable = true,
-      ajaxEnable = true
+      ajaxEnable = true,
+      behaviorEnable = true
     } = options
 
     this.options = {
       errorEnable,
       resourceEnable,
-      ajaxEnable
+      ajaxEnable,
+      behaviorEnable
     }
 
     this.log = new Log({
@@ -38,11 +41,9 @@ export default class Mpperformance {
     this.init();
   }
   init() {
-    const { errorEnable, resourceEnable, ajaxEnable } = this.options;
+    const { errorEnable, resourceEnable, ajaxEnable, behaviorEnable } = this.options;
     perf.load((data) => {
       this.perfInfo = data;
-      console.log('>>>>perf', this.perfInfo)
-      console.log('>>>>resource', this.resourceList)
       const reportData: typesReportData = {
         perfInfo: this.perfInfo,
         resourceList: this.resourceList,
@@ -53,10 +54,9 @@ export default class Mpperformance {
     if (errorEnable) {
       error.load((data) => {
         this.errorList.push(data);
-        console.log('>>>>error', this.errorList)
-        const reportData: typesReportData = {
-          errorList: this.errorList
-        }
+        // const reportData: typesReportData = {
+        //   errorList: this.errorList
+        // }
         // this.log.report(2, this.errorList);
       })
     }
@@ -66,6 +66,12 @@ export default class Mpperformance {
       })
     }
     if (ajaxEnable) { }
+    if (behaviorEnable) {
+      behavior.load((data) => {
+        // this.log.report(3, data);
+        console.log('>>>>>>>', data);
+      })
+    }
   }
   /**
    * 上报完后清除信息
