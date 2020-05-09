@@ -43,7 +43,7 @@ class Log {
     if (errorMsg) {
       return clog(errorMsg)
     }
-    window.fetch && fetch(domain, {
+    return window.fetch && fetch(domain, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       type: 'report-data',

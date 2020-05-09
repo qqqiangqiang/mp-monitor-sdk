@@ -38,6 +38,7 @@ export default class Mpperformance {
     this.perfInfo = {};
     this.errorList = [];
     this.resourceList = [];
+    this.behaviorInfo = {};
     this.init();
   }
   init() {
@@ -49,7 +50,9 @@ export default class Mpperformance {
         resourceList: this.resourceList,
         errorList: this.errorList
       }
-      this.log.report(1, reportData);
+      this.log.report(1, reportData).then(() => {
+        this.clear();
+      })
     });
     if (errorEnable) {
       error.load((data) => {
@@ -68,8 +71,13 @@ export default class Mpperformance {
     if (ajaxEnable) { }
     if (behaviorEnable) {
       behavior.load((data) => {
-        // this.log.report(3, data);
-        console.log('>>>>>>>', data);
+        this.behaviorInfo = data;
+        const reportData: typesReportData = {
+          behaviorInfo: data
+        }
+        this.log.report(3, reportData).then(() => {
+          this.clear();
+        });
       })
     }
   }
@@ -77,6 +85,7 @@ export default class Mpperformance {
    * 上报完后清除信息
    */
   clear() {
+    this.behaviorInfo = {};
     this.perfInfo = {};
     this.errorList = [];
     this.resourceList = [];

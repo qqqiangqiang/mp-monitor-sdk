@@ -1,4 +1,5 @@
 declare type typesReportData = {
+  behaviorInfo?: Object;
   perfInfo?: Object;
   errorList?: Array<typesErrorInfo>;
   resourceList?: Array<typesResourceInfo>;
@@ -35,10 +36,6 @@ declare type jsErrorDetailInfo = {
 declare type resourceErrorDetailInfo = {
   target: string; // 哪种资源报错 img/script/link
   type: string; // 报错类型 error
-  resourceUrl: string; // 报错资源地址 
-}
-
-declare type consoleErrorDetailInfo = {
   resourceUrl: string; // 报错资源地址 
 }
 
